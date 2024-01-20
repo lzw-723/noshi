@@ -19,7 +19,7 @@ type PlatformEnum = enum
 proc getCurrentPlatform*(): PlatformEnum =
   when system.hostOS == "windows":
     return WINDOWS
-  elif  system.hostOS == "linux":
+  elif system.hostOS == "linux":
     return LINUX
   elif system.hostOS == "macosx":
     return MACOS
