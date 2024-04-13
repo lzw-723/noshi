@@ -37,6 +37,7 @@ proc GetTokenInformation(tokenHandle: HANDLE, tokenInformationClass: TOKEN_INFOR
 proc GetCurrentProcessId(): int {.kernel32, importc: "GetCurrentProcessId".}
 proc GetCurrentThreadId(): int {.kernel32, importc: "GetCurrentThreadId".}
 proc GetPerformanceInfo(info: var PERFORMANCE_INFORMATION, cb: int): bool {.header: "<psapi.h>", importc: "GetPerformanceInfo".}
+proc GetHostName(name: var cstring, namelen: var int): int {.header: "<winbase.h>", importc: "GetComputerName".}
 
 proc isX86*(): bool =
   ## Is the processor architecture x86?
@@ -85,3 +86,10 @@ proc getThreadCount*(): int =
   var info: PERFORMANCE_INFORMATION
   discard GetPerformanceInfo(info, sizeof(info))
   return info.ThreadCount
+
+proc getHostName*(): string =
+  var name: cstring = "\0"
+  var namelen: int = 8
+  if GetHostName(name, namelen) != 0:
+    echo name == nil, name
+    return $name
